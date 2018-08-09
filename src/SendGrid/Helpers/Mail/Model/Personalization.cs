@@ -53,6 +53,12 @@ namespace SendGrid.Helpers.Mail
         public Dictionary<string, string> Substitutions { get; set; }
 
         /// <summary>
+        /// Gets or sets the object that will used for handlebar syxtax substitutions
+        /// </summary>
+        [JsonProperty(PropertyName = "dynamic_template_data", IsReference = false)]
+        public object DynamicTemplateData { get; set; }
+
+        /// <summary>
         /// Gets or sets the values that are specific to this personalization that will be carried along with the email, activity data, and links. Substitutions will not be made on custom arguments. personalizations[x].custom_args will be merged with message level custom_args, overriding any conflicting keys. The combined total size of the resulting custom arguments, after merging, for each personalization may not exceed 10,000 bytes.
         /// </summary>
         [JsonProperty(PropertyName = "custom_args", IsReference = false)]

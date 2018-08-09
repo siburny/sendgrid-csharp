@@ -1460,6 +1460,28 @@
         }
 
         [Fact]
+        public void TestAddDynamicTemplateData()
+        {
+            // Personalization does not exist
+            var msg = new SendGridMessage();
+            msg.AddDynamicTemplateData(new { Key1 = "Value1", Key2 = 123, Key3 = true });
+            Assert.True(msg.Serialize() == "{\"personalizations\":[{\"dynamic_template_data\":{\"Key1\":\"Value1\",\"Key2\":123,\"Key3\":true}}]}");
+
+            // Personalization already exists
+            msg = new SendGridMessage();
+            msg.AddTo(new EmailAddress("test001@example.com", "Example User"));
+            msg.AddDynamicTemplateData(new { Key12 = "Value1", Key22 = 123, Key32 = true });
+            Assert.True(msg.Serialize() == "{\"personalizations\":[{\"to\":[{\"name\":\"Example User\",\"email\":\"test001@example.com\"}],\"dynamic_template_data\":{\"Key12\":\"Value1\",\"Key22\":123,\"Key32\":true}}]}");
+
+            // Personalization already exists, but not at the passed index
+            msg = new SendGridMessage();
+            msg.AddTo(new EmailAddress("test001@example.com", "Example User 1"));
+            msg.AddTo(new EmailAddress("test002@example.com", "Example User 2"), 1);
+            msg.AddDynamicTemplateData(new { Key13 = "Value1", Key23 = 123, Key33 = true }, 1);
+            Assert.True(msg.Serialize() == "{\"personalizations\":[{\"to\":[{\"name\":\"Example User 1\",\"email\":\"test001@example.com\"}]},{\"to\":[{\"name\":\"Example User 2\",\"email\":\"test002@example.com\"}],\"dynamic_template_data\":{\"Key13\":\"Value1\",\"Key23\":123,\"Key33\":true}}]}");
+        }
+
+        [Fact]
         public void TestAddSubstitution()
         {
             // Personalization not passed in, Personalization does not exist

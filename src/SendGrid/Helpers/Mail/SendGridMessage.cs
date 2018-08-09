@@ -751,6 +751,29 @@ namespace SendGrid.Helpers.Mail
         }
 
         /// <summary>
+        /// Add a dynamic template data to the email
+        /// </summary>
+        /// <param name="dynamicTemplateData">An object contain the data.</param>
+        /// <param name="personalizationIndex">Specify the index of the Personalization object where you want to add the dynamic template data.</param>
+        public void AddDynamicTemplateData(object dynamicTemplateData, int personalizationIndex = 0)
+        {
+            if (this.Personalizations != null)
+            {
+                this.Personalizations[personalizationIndex].DynamicTemplateData = dynamicTemplateData;
+                return;
+            }
+
+            this.Personalizations = new List<Personalization>()
+            {
+                new Personalization()
+                {
+                    DynamicTemplateData = dynamicTemplateData
+                }
+            };
+            return;
+        }
+
+        /// <summary>
         /// Add a custom argument to the email.
         /// </summary>
         /// <param name="customArgKey">The custom argument key.</param>
